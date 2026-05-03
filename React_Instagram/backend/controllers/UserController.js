@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 
 const jwtSecret = process.env.JWT_SECRET;
 
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
 // Gerador de User Token
 const generateToken = (id) => {
@@ -84,8 +84,7 @@ const getCurrentUser = async (req, res) => {
 
 // Update User
 const update = async (req, res) => {
-
-  const {name, password, bio} = req.body;
+  const { name, password, bio } = req.body;
 
   let profileImage = null;
 
@@ -95,9 +94,9 @@ const update = async (req, res) => {
 
   const reqUser = req.user;
 
-  const user = await User.findById(new mongoose.Types.ObjectId(reqUser._id)).select(
-    "-password",
-);
+  const user = await User.findById(
+    new mongoose.Types.ObjectId(reqUser._id),
+  ).select("-password");
 
   if (name) {
     user.name = name;
@@ -108,20 +107,42 @@ const update = async (req, res) => {
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(password, salt);
 
-    user.password = passwordHash
+    user.password = passwordHash;
   }
 
-  if(profileImage) {
-    user.profileImage = profileImage
+  if (profileImage) {
+    user.profileImage = profileImage;
   }
 
-  if(bio) {
-    user.bio = bio
+  if (bio) {
+    user.bio = bio;
   }
 
-  await user.save()
+  await user.save();
 
-  res.status(200).json(user)
+  res.status(200).json(user);
+};
+
+// get do user por id
+const getUserId = async (req, res) => {
+
+  const { id } = req.params;
+
+  try {
+    const user = await User.findById(new mongoose.Types.ObjectId(id)).select(
+      "-password",
+    );
+
+    // checagem se user existe
+    if (!user) {
+      res.status(404).json({ errors: ["O usuário não existe"] });
+      return;
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(404).json({ errors: ["O usuário não existe"] });
+  }
 };
 
 module.exports = {
@@ -129,4 +150,5 @@ module.exports = {
   login,
   getCurrentUser,
   update,
+  getUserId,
 };
