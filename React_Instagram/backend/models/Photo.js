@@ -5,7 +5,7 @@ const photoSchema = new Schema({
     image: String, 
     title: String,
     likes: Array,
-    coments: Array,
+    comments: Array,
     userId: mongoose.ObjectId,
     userName: String,
 }, {
