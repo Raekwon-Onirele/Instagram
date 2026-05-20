@@ -1,9 +1,35 @@
-import "./NavBar.css"
+// import CSS
+import "./NavBar.css";
+
+// import Components
+import { NavLink, Link } from "react-router-dom";
+import {
+  BsSearch,
+  BsHouseDoorFill,
+  BsFillPersonFill,
+  BsFillCameraFill,
+} from "react-icons/bs";
 
 const NavBar = () => {
   return (
-    <div>NavBar</div>
-  )
-}
+    <nav id="nav">
+      <Link to="/">Instagram</Link>
+      <form>
+        <BsSearch />
+        <input type="text" placeholder="Pesquisar" />
+      </form>
+      <ul id="nav-links">
+        <li>
+          <NavLink to="/">
+            <BsHouseDoorFill />
+          </NavLink>
+        </li>
 
-export default NavBar
+        <NavLink to="/login">Entrar</NavLink>
+        <NavLink to="/register">Cadastrar</NavLink>
+      </ul>
+    </nav>
+  );
+};
+
+export default NavBar;
